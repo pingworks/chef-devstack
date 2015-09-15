@@ -11,6 +11,6 @@
 #
 # By default this script does nothing.
 
-su -c "/usr/bin/screen -dm -Sstack -c /home/ubuntu/devstack/stack-screenrc" -l ubuntu
+su -c "/usr/bin/screen -dm -c /home/ubuntu/devstack/stack-screenrc" -l ubuntu
 
 exit 0
