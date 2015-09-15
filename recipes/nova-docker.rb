@@ -32,7 +32,6 @@ bash 'patch nova-docker' do
   git config user.email "christoph.lukas@gmx.net"
   git config user.name "Christoph Lukas"
   git cherry-pick 3b3a0c744de288ef3477c6b2940e6308357777f2
-  git am < nova-docker-fix1.patch
   EOF
   not_if 'cd /home/ubuntu/nova-docker/ && git log -2 --oneline | grep "vif: Setup MTU on if_remote_name when attach"'
 end
