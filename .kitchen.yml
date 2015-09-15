@@ -1,0 +1,40 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+  #require_chef_omnibus: false
+
+platforms:
+  - name: ubuntu-14.04
+    driver:
+      box: trusty-server-cloudimg-amd64-vagrant-disk1
+      box_url: https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box
+
+suites:
+  - name: ctrl
+    run_list:
+      - recipe[devstack::ctrl]
+    attributes:
+      devstack:
+        type: "ctrl"
+    driver:
+      network:
+        - [ 'private_network', { ip: '192.168.56.100' } ]
+      customize:
+        memory: 4096
+
+  - name: compute
+    run_list:
+      - recipe[devstack::compute]
+    attributes:
+      devstack:
+        type: "compute"
+        tun_iface_ip: "192.168.56.200"
+        host_ip: "192.168.56.200"
+    driver:
+      network:
+        - [ 'private_network', { ip: '192.168.56.200' } ]
+      customize:
+        memory: 2048

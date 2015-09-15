@@ -1,0 +1,21 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+auto eth0
+iface eth0 inet dhcp
+	up   ip addr add <%= node['devstack']['external_iface_ip'] %>/<%= node['devstack']['external_iface_nm'] %> dev $IFACE
+	down ip addr del <%= node['devstack']['external_iface_ip'] %>/<%= node['devstack']['external_iface_nm'] %> dev $IFACE
+
+<% if node['devstack']['type']=='ctrl' -%>
+auto br-ex
+iface br-ex inet static
+  address <%= node['devstack']['router_public_gw'] %>
+	netmask <%= node['devstack']['router_public_nm'] %>
+	up   ip route add <%= node['devstack']['router_private_network'] %> via <%= node['devstack']['router_public_ip'] %> dev $IFACE
+	down ip route del <%= node['devstack']['router_private_network'] %> via <%= node['devstack']['router_public_ip'] %> dev $IFACE
+<% end -%>

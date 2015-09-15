@@ -1,0 +1,25 @@
+From 956c8e6cd69429264030daa5a94394d03d40ad84 Mon Sep 17 00:00:00 2001
+From: Christoph Lukas <christoph.lukas@gmx.net>
+Date: Tue, 15 Sep 2015 13:00:25 +0200
+Subject: [PATCH] Fix key ownership after injection
+
+---
+ novadocker/virt/docker/driver.py | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/novadocker/virt/docker/driver.py b/novadocker/virt/docker/driver.py
+index 61f12f5..eedb2c9 100644
+--- a/novadocker/virt/docker/driver.py
++++ b/novadocker/virt/docker/driver.py
+@@ -462,7 +462,9 @@ class DockerDriver(driver.ComputeDriver):
+         keys_file = os.path.join(sshdir, 'authorized_keys')
+         with open(keys_file, 'a') as f:
+             f.write(key_data)
++        os.chown(sshdir, 0, 0)
+         os.chmod(sshdir, 0o700)
++        os.chown(keys_file, 0, 0)
+         os.chmod(keys_file, 0o600)
+         return sshdir
+
+--
+1.9.1

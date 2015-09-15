@@ -1,0 +1,82 @@
+[[local|localrc]]
+ADMIN_PASSWORD=secret
+DATABASE_PASSWORD=$ADMIN_PASSWORD
+RABBIT_PASSWORD=$ADMIN_PASSWORD
+SERVICE_PASSWORD=$ADMIN_PASSWORD
+SERVICE_TOKEN=super-secret-admin-token
+VIRT_DRIVER=novadocker.virt.docker.DockerDriver
+
+DEST=$HOME/stack
+SERVICE_DIR=$DEST/status
+DATA_DIR=$DEST/data
+LOGFILE=$DEST/logs/stack.sh.log
+LOGDIR=$DEST/logs
+
+DOWNLOAD_DEFAULT_IMAGES=False
+#NO_UPDATE_REPOS=True
+
+# networking config
+HOST_IP=<%= node['devstack']['host_ip'] %>
+# the one and only interface to use
+FLAT_INTERFACE=<%= node['devstack']['tun_iface'] %>
+
+# git repos
+NOVNC_REPO="<%= node['devstack']['gitmirror'] %>/kanaka/noVNC.git"
+GIT_BASE="<%= node['devstack']['gitmirror'] %>"
+
+# use designate stable branch
+DESIGNATE_BRANCH="stable/kilo"
+# set designate ip to
+# DESIGNATE_SERVICE_HOST=""
+DESIGNATE_DEFAULT_NS_RECORD="<%= node['devstack']['defaultnsrecord'] %>"
+
+MULTI_HOST=1
+
+<% if node['devstack']['type']=='ctrl' -%>
+disable_service n-net
+enable_service designate
+enable_service designate-central
+enable_service designate-api
+enable_service designate-pool-manager
+enable_service designate-zone-manager
+enable_service designate-mdns
+enable_service q-svc
+enable_service q-agt
+enable_service q-dhcp
+enable_service q-l3
+enable_service q-meta
+enable_service neutron
+<% end -%>
+<% if node['devstack']['type']=='compute' -%>
+ENABLED_SERVICES=n-cpu,rabbit,neutron,q-agt
+SERVICE_HOST="<%= node['devstack']['global_ctrl_ip'] %>"
+MYSQL_HOST=$SERVICE_HOST
+RABBIT_HOST=$SERVICE_HOST
+Q_HOST=$SERVICE_HOST
+MATCHMAKER_REDIS_HOST=$SERVICE_HOST
+<% end -%>
+
+# disable_service horizon
+disable_service tempest
+
+# Introduce glance to docker images
+[[post-config|$GLANCE_API_CONF]]
+[DEFAULT]
+container_formats=ami,ari,aki,bare,ovf,ova,docker
+
+# Configure nova to use the nova-docker driver
+[[post-config|$NOVA_CONF]]
+[DEFAULT]
+compute_driver=novadocker.virt.docker.DockerDriver
+network_device_mtu = 1400
+rabbit_host=<%= node['devstack']['global_ctrl_ip'] %>
+[docker]
+inject_key = True
+
+[[post-config|$NEUTRON_CONF]]
+[DEFAULT]
+rabbit_host=<%= node['devstack']['global_ctrl_ip'] %>
+
+[[post-config|/etc/neutron/dhcp_agent.ini]]
+[DEFAULT]
+dnsmasq_config_file = /etc/neutron/dnsmasq-neutron.conf
