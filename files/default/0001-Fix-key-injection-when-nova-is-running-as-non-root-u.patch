@@ -1,0 +1,44 @@
+From e70058cf9292602a5cc56cd24f9f695a4ab84530 Mon Sep 17 00:00:00 2001
+From: Christoph Lukas <christoph.lukas@gmx.net>
+Date: Wed, 16 Sep 2015 08:01:14 +0200
+Subject: [PATCH] Fix key injection when nova is running as non root user
+
+---
+ novadocker/virt/docker/driver.py | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/novadocker/virt/docker/driver.py b/novadocker/virt/docker/driver.py
+index 5178158..1e8848f 100644
+--- a/novadocker/virt/docker/driver.py
++++ b/novadocker/virt/docker/driver.py
+@@ -462,10 +462,16 @@ class DockerDriver(driver.ComputeDriver):
+         ])
+         fileutils.ensure_tree(sshdir)
+         keys_file = os.path.join(sshdir, 'authorized_keys')
++        owner_group = str(os.getuid()) + ':' + str(os.getgid())
++        utils.execute('chown', owner_group, sshdir, run_as_root=True)
++        if os.path.isfile(keys_file):
++            utils.execute('chown', owner_group, keys_file, run_as_root=True)
+         with open(keys_file, 'a') as f:
+             f.write(key_data)
+         os.chmod(sshdir, 0o700)
+         os.chmod(keys_file, 0o600)
++        utils.execute('chown', 'root:root', sshdir, run_as_root=True)
++        utils.execute('chown', 'root:root', keys_file, run_as_root=True)
+         return sshdir
+
+     def _cleanup_key(self, instance, id):
+@@ -476,6 +482,11 @@ class DockerDriver(driver.ComputeDriver):
+             LOG.info(_LI('Deleting instance files %s'), dir,
+                      instance=instance)
+             try:
++                sshdir = os.path.join(CONF.instances_path, id, '.ssh')
++                keys_file = os.path.join(sshdir, 'authorized_keys')
++                owner_group = str(os.getuid()) + ':' + str(os.getgid())
++                utils.execute('chown', owner_group, sshdir, run_as_root=True)
++                utils.execute('chown', owner_group, keys_file, run_as_root=True)
+                 shutil.rmtree(dir)
+             except OSError as e:
+                 LOG.error(_LE('Failed to cleanup directory %(target)s: '
+--
+1.9.1
