@@ -12,5 +12,6 @@
 # By default this script does nothing.
 
 su -c "/usr/bin/screen -dm -c /home/ubuntu/devstack/stack-screenrc" -l ubuntu
+iptables -t nat -A POSTROUTING -o #{node['devstack']['external_iface']} -j MASQUERADE
 
 exit 0

@@ -38,8 +38,8 @@ remote_file 'docker.filtes' do
   source 'file:///home/ubuntu/nova-docker/etc/nova/rootwrap.d/docker.filters'
 end
 
-cookbook_file 'rc-local' do
-  path '/etc/rc.local'
+template '/etc/rc.local' do
+  source 'rc-local.erb'
   owner 'root'
   group 'root'
   mode '0755'
