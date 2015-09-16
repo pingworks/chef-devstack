@@ -16,6 +16,13 @@ bash 'checkout nova-docker' do
   not_if 'test -d /home/ubuntu/nova-docker/.git'
 end
 
+cookbook_file 'nova-docker-fix1.patch' do
+  path '/home/ubuntu/nova-docker/nova-docker-fix1.patch'
+  owner 'root'
+  group 'root'
+  mode '644'
+end
+
 bash 'patch nova-docker' do
   user 'ubuntu'
   group 'ubuntu'
