@@ -8,7 +8,7 @@ apt_repository 'docker' do
   uri 'https://apt.dockerproject.org/repo'
   distribution 'ubuntu-trusty'
   components ['main']
-  keyserver 'p80.pool.sks-keyservers.net'
+  keyserver 'keyserver.ubuntu.com'
   key '58118E89F3A912897C070ADBF76221572C52609D'
   action :add
 end
