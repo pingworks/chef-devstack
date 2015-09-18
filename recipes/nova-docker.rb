@@ -22,6 +22,13 @@ cookbook_file '0001-Fix-key-injection-when-nova-is-running-as-non-root-u.patch' 
   mode '644'
 end
 
+cookbook_file '0002-modify-requirements-to-match-keystone-requirements.patch' do
+  path '/home/ubuntu/nova-docker/0002-modify-requirements-to-match-keystone-requirements.patch'
+  owner 'root'
+  group 'root'
+  mode '644'
+end
+
 bash 'patch nova-docker' do
   user 'ubuntu'
   group 'ubuntu'
@@ -36,10 +43,10 @@ bash 'patch nova-docker' do
   git cherry-pick 3b3a0c744de288ef3477c6b2940e6308357777f2
   git cherry-pick 005921b0741f6753799807af6b4444153888851a
   git am < 0001-Fix-key-injection-when-nova-is-running-as-non-root-u.patch
+  git am < 0002-modify-requirements-to-match-keystone-requirements.patch
   EOF
   not_if 'cd /home/ubuntu/nova-docker/ && git log -2 --oneline | grep "vif: Setup MTU on if_remote_name when attach"'
 end
-
 
 bash 'install nova-docker' do
   user 'ubuntu'
