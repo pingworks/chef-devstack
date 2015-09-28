@@ -6,10 +6,6 @@
 #
 # All rights reserved - Do Not Redistribute
 #
-
-package 'git'
-package 'maven'
-
 if node['devstack']['type']=='ctrl' then
   include_recipe 'devstack::ctrl'
 end

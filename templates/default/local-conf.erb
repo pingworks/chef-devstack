@@ -80,3 +80,6 @@ rabbit_host=<%= node['devstack']['global_ctrl_ip'] %>
 [[post-config|/etc/neutron/dhcp_agent.ini]]
 [DEFAULT]
 dnsmasq_config_file = /etc/neutron/dnsmasq-neutron.conf
+
+[[post-config|/etc/powerdns/pdns.conf]]
+recursor=<%= node['devstack']['global_gw_ip'] %>

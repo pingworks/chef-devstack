@@ -25,5 +25,5 @@ cookbook_file 'default-docker' do
   mode '0600'
   owner 'root'
   group 'root'
-  notifies :restart, 'service[docker]', :delayed
+  notifies :restart, 'service[docker]', :immediately
 end
