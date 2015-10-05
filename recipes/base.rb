@@ -7,6 +7,7 @@ cookbook_file 'sources-list' do
 end
 
 # apt-get update
+node.force_override['apt']['periodic_update_min_delay'] = 0
 include_recipe 'apt'
 
 include_recipe 'devstack::ubuntu-user'
