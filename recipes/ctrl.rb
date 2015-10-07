@@ -9,7 +9,7 @@
 
 include_recipe 'devstack::base'
 
-include_recipe 'devstack::docker'
+include_recipe 'pw_dockerhost'
 include_recipe 'devstack::nova-docker'
 include_recipe 'devstack::devstack'
 include_recipe 'devstack::openstack-scripts'
