@@ -1,9 +1,9 @@
 [[local|localrc]]
-ADMIN_PASSWORD=secret
+ADMIN_PASSWORD=<%= node['devstack']['admin_pwd'] %>
 DATABASE_PASSWORD=$ADMIN_PASSWORD
 RABBIT_PASSWORD=$ADMIN_PASSWORD
 SERVICE_PASSWORD=$ADMIN_PASSWORD
-SERVICE_TOKEN=super-secret-admin-token
+SERVICE_TOKEN=<%= node['devstack']['service_token'] %>
 VIRT_DRIVER=novadocker.virt.docker.DockerDriver
 
 DEST=$HOME/stack
