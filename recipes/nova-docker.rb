@@ -57,3 +57,16 @@ bash 'install nova-docker' do
   EOF
   not_if 'test -d /usr/local/lib/python2.7/dist-packages/novadocker'
 end
+
+directory '/etc/nova/rootwrap.d' do
+  owner 'root'
+  group 'root'
+  mode 00755
+  recursive true
+  action :create
+end
+
+remote_file 'docker.filtes' do
+  path '/etc/nova/rootwrap.d/docker.filters'
+  source 'file:///home/ubuntu/nova-docker/etc/nova/rootwrap.d/docker.filters'
+end

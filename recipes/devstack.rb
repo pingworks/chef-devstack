@@ -33,11 +33,6 @@ bash 'install devstack' do
   not_if 'test -f /home/ubuntu/devstack/stack-screenrc'
 end
 
-remote_file 'docker.filtes' do
-  path '/etc/nova/rootwrap.d/docker.filters'
-  source 'file:///home/ubuntu/nova-docker/etc/nova/rootwrap.d/docker.filters'
-end
-
 template '/etc/rc.local' do
   source 'rc-local.erb'
   owner 'root'
