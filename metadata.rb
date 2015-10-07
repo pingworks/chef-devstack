@@ -7,3 +7,6 @@ long_description 'Installs/Configures devstack'
 version          '0.1.0'
 
 depends 'apt'
+depends 'pw_openvpn'
+depends 'pw_dnsmasq'
+depends 'pw_wpasupplicant'

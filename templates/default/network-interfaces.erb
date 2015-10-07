@@ -20,3 +20,9 @@ iface br-ex inet static
 	up   ip route add <%= node['devstack']['router_private_network'] %> via <%= node['devstack']['router_public_ip'] %> dev $IFACE
 	down ip route del <%= node['devstack']['router_private_network'] %> via <%= node['devstack']['router_public_ip'] %> dev $IFACE
 <% end -%>
+
+<% if node['devstack']['type']=='gateway' %>
+auto wlan0
+iface wlan0 inet dhcp
+	wpa-conf /etc/wpa_supplicant/wpa.conf
+<% end -%>
