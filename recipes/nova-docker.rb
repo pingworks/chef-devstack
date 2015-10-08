@@ -1,9 +1,3 @@
-
-# deps for devstack installation
-package 'git'
-package 'python-pip'
-package 'python-dev'
-
 bash 'checkout nova-docker' do
   user 'ubuntu'
   group 'ubuntu'
@@ -45,7 +39,7 @@ bash 'patch nova-docker' do
   git am < 0001-Fix-key-injection-when-nova-is-running-as-non-root-u.patch
   git am < 0002-modify-requirements-to-match-keystone-requirements.patch
   EOF
-  not_if 'cd /home/ubuntu/nova-docker/ && git log -2 --oneline | grep "vif: Setup MTU on if_remote_name when attach"'
+  not_if 'cd /home/ubuntu/nova-docker/ && git log -1 --oneline | grep "modify requirements to match keystone requirements"'
 end
 
 bash 'install nova-docker' do
@@ -56,17 +50,4 @@ bash 'install nova-docker' do
   sudo pip install .
   EOF
   not_if 'test -d /usr/local/lib/python2.7/dist-packages/novadocker'
-end
-
-directory '/etc/nova/rootwrap.d' do
-  owner 'root'
-  group 'root'
-  mode 00755
-  recursive true
-  action :create
-end
-
-remote_file 'docker.filtes' do
-  path '/etc/nova/rootwrap.d/docker.filters'
-  source 'file:///home/ubuntu/nova-docker/etc/nova/rootwrap.d/docker.filters'
 end
