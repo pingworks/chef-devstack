@@ -31,7 +31,6 @@ suites:
     attributes:
       devstack:
         type: "compute"
-        tun_iface_ip: "192.168.56.200"
         host_ip: "192.168.56.200"
     driver:
       network:
