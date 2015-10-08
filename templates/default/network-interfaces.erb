@@ -6,11 +6,13 @@ auto lo
 iface lo inet loopback
 
 # The primary network interface
-auto eth0
-iface eth0 inet static
-	address <%= node['devstack']['external_iface_ip'] %>
-	netmask <%= node['devstack']['external_iface_nm'] %>
+auto <%= node['devstack']['service_iface'] %>
+iface <%= node['devstack']['service_iface'] %> inet static
+	address <%= node['devstack']['host_ip'] %>
+	netmask <%= node['devstack']['host_nm'] %>
+<% if node['devstack']['type'] != 'gateway' %>
 	gateway <%= node['devstack']['global_gw_ip'] %>
+<% end -%>
 
 <% if node['devstack']['type']=='ctrl' -%>
 auto br-ex
@@ -21,8 +23,10 @@ iface br-ex inet static
 	down ip route del <%= node['devstack']['router_private_network'] %> via <%= node['devstack']['router_public_ip'] %> dev $IFACE
 <% end -%>
 
-<% if node['devstack']['type']=='gateway' %>
-auto wlan0
-iface wlan0 inet dhcp
+<% if node['devstack']['type'] == 'gateway' -%>
+auto <%= node['devstack']['external_iface'] %>
+iface <%= node['devstack']['external_iface'] %> inet dhcp
+<% if node['devstack']['external_iface']=='wlan0' -%>
 	wpa-conf /etc/wpa_supplicant/wpa.conf
+<% end -%>
 <% end -%>

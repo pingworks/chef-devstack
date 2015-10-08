@@ -18,7 +18,7 @@ DOWNLOAD_DEFAULT_IMAGES=False
 # networking config
 HOST_IP=<%= node['devstack']['host_ip'] %>
 # the one and only interface to use
-FLAT_INTERFACE=<%= node['devstack']['tun_iface'] %>
+FLAT_INTERFACE=<%= node['devstack']['service_iface'] %>
 
 # git repos
 NOVNC_REPO="<%= node['devstack']['gitmirror'] %>/kanaka/noVNC.git"
@@ -80,6 +80,3 @@ rabbit_host=<%= node['devstack']['global_ctrl_ip'] %>
 [[post-config|/etc/neutron/dhcp_agent.ini]]
 [DEFAULT]
 dnsmasq_config_file = /etc/neutron/dnsmasq-neutron.conf
-
-[[post-config|/etc/powerdns/pdns.conf]]
-recursor=<%= node['devstack']['global_gw_ip'] %>
