@@ -1,0 +1,12 @@
+diff --git a/lib/infra b/lib/infra
+index 3d68e45..5b5b7f3 100644
+--- a/lib/infra
++++ b/lib/infra
+@@ -32,6 +32,7 @@ function install_infra {
+     local PIP_VIRTUAL_ENV="$REQUIREMENTS_DIR/.venv"
+     # bring down global requirements
+     git_clone $REQUIREMENTS_REPO $REQUIREMENTS_DIR $REQUIREMENTS_BRANCH
++    sed -i -e 's;requests>=2.2.0,!=2.4.0;requests>=2.2.0,!=2.4.0,<2.8.0;' $REQUIREMENTS_DIR/global-requirements.txt
+     [ ! -d $PIP_VIRTUAL_ENV ] && virtualenv $PIP_VIRTUAL_ENV
+     # We don't care about testing git pbr in the requirements venv.
+     PIP_VIRTUAL_ENV=$PIP_VIRTUAL_ENV pip_install -U pbr
