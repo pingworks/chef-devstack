@@ -7,6 +7,6 @@ end
 
 bash 'reload sysctl' do
   code <<-EOF
-  sysctl -p
+  sysctl --system
   EOF
 end
