@@ -5,7 +5,7 @@ template '/etc/network/interfaces' do
   mode '0755'
 end
 
-if node['devstack']['type'] == 'gateway' then
+if node['devstack']['type'] == 'gateway' || node['devstack']['type'] == 'ctrl' then
   bash 'setup masquerading' do
     user 'root'
     code "iptables -t nat -A POSTROUTING -o #{node['devstack']['external_iface']} -j MASQUERADE"
@@ -19,7 +19,9 @@ if node['devstack']['type'] == 'gateway' then
     EOH
     not_if 'grep "MASQUERADE" /etc/rc.local'
   end
-else
+end
+
+if node['devstack']['type'] == 'ctrl' || node['devstack']['type'] == 'compute' then
   bash 'fix routing' do
     user 'root'
     code <<-EOH
