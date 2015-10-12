@@ -1,0 +1,6 @@
+auto br-ex
+iface br-ex inet static
+	address <%= node['devstack']['router_public_gw'] %>
+	netmask <%= node['devstack']['router_public_nm'] %>
+	up   ip route add <%= node['devstack']['router_private_network'] %> via <%= node['devstack']['router_public_ip'] %> dev $IFACE
+	down ip route del <%= node['devstack']['router_private_network'] %> via <%= node['devstack']['router_public_ip'] %> dev $IFACE

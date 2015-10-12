@@ -1,0 +1,5 @@
+auto <%= node['devstack']['external_iface'] %>
+iface <%= node['devstack']['external_iface'] %> inet dhcp
+<% if node['devstack']['external_iface'].match(/^wlan/) -%>
+	wpa-conf /etc/wpa_supplicant/wpa.conf
+<% end -%>

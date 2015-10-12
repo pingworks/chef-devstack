@@ -1,0 +1,11 @@
+# The service network interface
+auto <%= node['devstack']['service_iface'] %>
+iface <%= node['devstack']['service_iface'] %> inet static
+	address <%= node['devstack']['host_ip'] %>
+	netmask <%= node['devstack']['host_nm'] %>
+<% if node['devstack']['roles'].include?('gateway') %>
+	up   ip route add <%= node['devstack']['router_public_network'] %> via <%= node['devstack']['global_ctrl_ip'] %> dev $IFACE
+	down ip route del <%= node['devstack']['router_public_network'] %> via <%= node['devstack']['global_ctrl_ip'] %> dev $IFACE
+<% else -%>
+	gateway <%= node['devstack']['global_gw_ip'] %>
+<% end -%>

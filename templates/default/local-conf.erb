@@ -32,7 +32,7 @@ DESIGNATE_DEFAULT_NS_RECORD="<%= node['devstack']['defaultnsrecord'] %>"
 
 MULTI_HOST=1
 
-<% if node['devstack']['type']=='ctrl' -%>
+<% if node['devstack']['roles'].include?('ctrl') -%>
 disable_service n-net
 enable_service designate
 enable_service designate-central
@@ -47,7 +47,7 @@ enable_service q-l3
 enable_service q-meta
 enable_service neutron
 <% end -%>
-<% if node['devstack']['type']=='compute' -%>
+<% if node['devstack']['roles'].include?('compute') -%>
 ENABLED_SERVICES=n-cpu,rabbit,neutron,q-agt
 SERVICE_HOST="<%= node['devstack']['global_ctrl_ip'] %>"
 MYSQL_HOST=$SERVICE_HOST

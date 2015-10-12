@@ -1,4 +1,4 @@
-default['devstack']['type'] = 'ctrl'
+default['devstack']['roles'] = ['ctrl']
 default['devstack']['service_iface'] = 'eth1'
 default['devstack']['external_iface'] = 'eth0'
 default['devstack']['host_ip'] = '192.168.56.10'
