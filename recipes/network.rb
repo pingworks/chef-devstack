@@ -52,6 +52,14 @@ if ! node['devstack']['roles'].include?('gateway') then
     code <<-EOH
     ip route del default
     ip route add default via #{node['devstack']['global_gw_ip']}
+    EOH
+  end
+end
+
+if node['devstack']['roles'].include?('gateway') then
+  bash 'fix routing' do
+    user 'root'
+    code <<-EOH
     ip route add #{node['devstack']['router_public_network']} via #{node['devstack']['global_ctrl_ip']}
     EOH
   end
