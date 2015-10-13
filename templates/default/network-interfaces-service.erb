@@ -8,4 +8,5 @@ iface <%= node['devstack']['service_iface'] %> inet static
 	down ip route del <%= node['devstack']['router_public_network'] %> via <%= node['devstack']['global_ctrl_ip'] %> dev $IFACE
 <% else -%>
 	gateway <%= node['devstack']['global_gw_ip'] %>
+	dns-nameservers <%= node['devstack']['global_gw_ip'] %>
 <% end -%>
